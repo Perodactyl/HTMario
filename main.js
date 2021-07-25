@@ -11,7 +11,28 @@ function UIFrame(){
 setInterval(UIFrame, 1000/10)
 var framerule = 0
 function gameFrame(){
+    ctx.clearRect(0, 0, canv.width, canv.height)
     framerule += 1
     framerule %= 21
+    if(framerule == 0){
+        for(timer in timers){
+            if(timers[timer].type == 0){
+                timers[timer]()
+                if(!timers[timer].const)timers.splice(timer, 1)
+            }
+        }
+    }
+    for(timer in timers){
+        if(timers[timer].type == 1){
+            timers[timer]()
+            if(!timers[timer].const)timers.splice(timer, 1)
+        }
+    }
+}
+var timers = []
+function addTimer(callback, type=0, constant=false){
+    callback.type = type
+    callback.const = constant
+    timers.push(callback)
 }
 setInterval(gameFrame, 1000/60)
